@@ -1,0 +1,75 @@
+
+@model csharpExam.Models.Activity
+{
+    
+}
+
+<div class="container">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <a class="navbar-brand">Dojo Activity Center</a>
+            <button class="navbar-toggler" data-target="#my-nav" data-toggle="collapse" aria-controls="my-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="my-nav" class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/home">Home<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">logout</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+
+    <div class="container mt-5">
+            <div class="row">
+                <div class="col">
+                    <h2>@ViewBag.thisActivity.Title</h2>
+                </div>
+                <div class="col">
+                    @if (ViewBag.thisActivity.CoordinatorId == ViewBag.ThisUser.UserId)
+                    {
+                        <a class="btn btn-danger" href="/delete/@ViewBag.thisActivity.ActivityId">Delete</a>
+                    }
+                    else
+                        {
+                            int userId = 0;
+                            @foreach (var a in ViewBag.AllParticipants.Participants)
+                            {
+                                if (a.User.UserId == ViewBag.ThisUser.UserId)
+                                {
+                                    userId = a.ParticipantId;
+                                }
+                            }
+                            @if (userId == 0)
+                            {
+                                <a class="btn btn-success" href="/join/@ViewBag.thisActivity.ActivityId">Join</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-danger" href="/leave/@userId">Leave</a>
+                            }
+                        }
+                </div>
+            </div>
+            
+        </div>
+            
+        <div class="info">
+            <h3>Event Coordinator: @ViewBag.coordinator.FirstName</h3>
+            <h3>Description:</h3>
+            <p>@ViewBag.ThisActivity.Description</p>
+            <h3>Participants:</h3>
+            <ul>
+                @foreach(var p in ViewBag.AllParticipants.Participants)
+                {
+                    <li> <h4>@p.User.FirstName @p.User.LastName </h4></li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
